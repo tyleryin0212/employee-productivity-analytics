@@ -1,0 +1,1 @@
+# abstractFullTimeEmployee + Manager + IndividualContributor
