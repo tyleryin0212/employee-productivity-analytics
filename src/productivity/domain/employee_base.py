@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 from abc import ABC
-from typing import Protocol
+from typing import ClassVar, Protocol
 
 from .contact_info import ContactInfo
 from .enums import EducationLevel, EmploymentLevel
@@ -16,7 +16,7 @@ class ProductivityEstimate(Protocol):
 
 @dataclass(eq=True)
 class AbstractEmployee(ABC):
-    EMPLOYMENT_LEVEL_BONUS: float = 1.4
+    EMPLOYMENT_LEVEL_BONUS: ClassVar[float] = 1.4
 
     id: str
     contact: ContactInfo
@@ -43,3 +43,5 @@ class AbstractEmployee(ABC):
             return: super().estimate_productivity() + extra_terms
         """
         return self._employee_level_bonus()
+
+    
