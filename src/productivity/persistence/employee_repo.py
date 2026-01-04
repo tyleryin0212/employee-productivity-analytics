@@ -1,0 +1,6 @@
+from __future__ import annotations
+from typing import Protocol, Optional, Any
+
+class EmployeeRepository(Protocol):
+    def save(self, employee: Any) -> Any: ...
+    def get(self, employee_id: str) -> Optional[Any]: ...

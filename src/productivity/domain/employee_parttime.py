@@ -26,8 +26,8 @@ class AbstractPartTimeEmployee(AbstractEmployee, ABC):
      
 
 class HourlyEmployee(AbstractPartTimeEmployee):
-    HOURLY_EARNINGS_BONUS: ClassVar[float] = 14.0
-    HOURLY_EARNINGS_BONUS_THRESHOLD: ClassVar[float] = 3.0
+    HOURLY_EARNINGS_BONUS: ClassVar[float] = 3.0
+    HOURLY_EARNINGS_BONUS_THRESHOLD: ClassVar[float] = 14.0
 
     hourly_earnings: float
 
@@ -41,7 +41,7 @@ class HourlyEmployee(AbstractPartTimeEmployee):
     def estimate_productivity(self):
         return super().estimate_productivity() + self._hourly_earnings_bonus()
     
-    
+
 
 @dataclass(eq=True)        
 class BenefitsEligibleEmployee(AbstractPartTimeEmployee):
