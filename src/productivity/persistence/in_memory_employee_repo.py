@@ -1,26 +1,21 @@
 from __future__ import annotations
 
-from typing import Any, Optional, Dict
+from typing import Dict, Optional
 from uuid import uuid4
+
+from productivity.domain.employee_base import AbstractEmployee
 
 
 class InMemoryEmployeeRepository:
     def __init__(self):
-        self._store: Dict[str, Any] = {}
+        self._store: Dict[str, AbstractEmployee] = {}
 
-    def save(self, employee: Any) -> Any:
-        # supports dict placeholder OR your domain object once added
-        if isinstance(employee, dict):
-            emp_id = employee.get("id") or str(uuid4())
-            employee["id"] = emp_id
-            self._store[emp_id] = employee
-            return employee
+    def save(self, employee: AbstractEmployee) -> AbstractEmployee:
+        if not employee.id:
+            employee.id = str(uuid4())
 
-        # If domain object, assume it has .id
-        emp_id = getattr(employee, "id", None) or str(uuid4())
-        setattr(employee, "id", emp_id)
-        self._store[emp_id] = employee
+        self._store[employee.id] = employee
         return employee
 
-    def get(self, employee_id: str) -> Optional[Any]:
+    def get(self, employee_id: str) -> Optional[AbstractEmployee]:
         return self._store.get(employee_id)
