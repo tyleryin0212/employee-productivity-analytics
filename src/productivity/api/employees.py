@@ -32,3 +32,10 @@ def get_employee(employee_id: str):
     if employee is None:
         return {"error": "Employee not found"}, 404
     return employee, 200
+
+@bp.get("/<employee_id>/productivity")
+def get_productivity(employee_id: str):
+    result = _service.get_productivity(employee_id)
+    if result is None:
+        return {"error": "Employee not found"}, 404
+    return result, 200

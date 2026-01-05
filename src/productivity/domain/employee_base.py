@@ -18,7 +18,7 @@ class ProductivityEstimate(Protocol):
 class AbstractEmployee(ABC):
     EMPLOYMENT_LEVEL_BONUS: ClassVar[float] = 1.4
 
-    id: str
+    id: str 
     contact: ContactInfo
     employment_date: date
     education_level: EducationLevel
@@ -26,6 +26,7 @@ class AbstractEmployee(ABC):
     last_year_earnings: float
     overtime_earnings: float
     bonus: float
+    
 
     def _employee_level_bonus(self) -> float:
         """

@@ -1,7 +1,7 @@
 # AbstractPartTimeEmployee + HourlyEmployee
 
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from abc import ABC
 from typing import ClassVar
 
@@ -13,7 +13,7 @@ class AbstractPartTimeEmployee(AbstractEmployee, ABC):
 
     contractual_work_hours: float
     actual_work_hours: float
-    extra_earnings: float
+    extra_earnings: float = field(init=False)
 
     def __post_init__(self) -> None:
         self.extra_earnings = self.bonus + self.overtime_earnings
@@ -24,7 +24,7 @@ class AbstractPartTimeEmployee(AbstractEmployee, ABC):
     def estimate_productivity(self) -> float:
         return super().estimate_productivity() + self._base_productivity_part_time()
      
-
+@dataclass(eq=True)
 class HourlyEmployee(AbstractPartTimeEmployee):
     HOURLY_EARNINGS_BONUS: ClassVar[float] = 3.0
     HOURLY_EARNINGS_BONUS_THRESHOLD: ClassVar[float] = 14.0

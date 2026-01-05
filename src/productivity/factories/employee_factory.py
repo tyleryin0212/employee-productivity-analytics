@@ -33,6 +33,8 @@ class EmployeeFactory:
         kwargs = dict(data)
         kwargs.pop("type", None)  # not a dataclass field
 
+        kwargs.setdefault("id", "")
+
         # --- nested dataclasses ---
         if "contact" in kwargs and isinstance(kwargs["contact"], dict):
             kwargs["contact"] = cls._parse_contact(kwargs["contact"])

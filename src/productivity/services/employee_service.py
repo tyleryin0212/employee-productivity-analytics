@@ -69,3 +69,14 @@ class EmployeeService:
             return [self._json_safe(v) for v in obj]
 
         return obj
+
+# get employee productivity
+def get_productivity(self, employee_id: str) -> Optional[Dict[str, Any]]:
+    emp = self._repo.get(employee_id)
+    if emp is None:
+        return None
+    return {
+        "employee_id": emp.id,
+        "type": emp.__class__.__name__,
+        "productivity": emp.estimate_productivity(),
+    }
