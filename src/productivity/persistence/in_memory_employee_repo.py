@@ -7,10 +7,16 @@ from productivity.domain.employee_base import AbstractEmployee
 
 
 class InMemoryEmployeeRepository:
-    def __init__(self):
+    """
+    Dev/test repository.
+    Stores domain objects in a dict in memory.
+    """
+
+    def __init__(self) -> None:
         self._store: Dict[str, AbstractEmployee] = {}
 
     def save(self, employee: AbstractEmployee) -> AbstractEmployee:
+        # Server-generated id
         if not employee.id:
             employee.id = str(uuid4())
 

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Protocol, Optional, Any
+from typing import Protocol, Optional
 
 from productivity.domain.employee_base import AbstractEmployee
 

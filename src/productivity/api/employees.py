@@ -1,41 +1,28 @@
-from __future__ import annotations
-from flask import Blueprint, request
-
-from productivity.services.employee_service import EmployeeService
-from productivity.persistence.in_memory_employee_repo import InMemoryEmployeeRepository
+from flask import Blueprint, request, current_app
 
 bp = Blueprint("employees", __name__, url_prefix="/employees")
 
-#wiring
-_repo = InMemoryEmployeeRepository()
-_service = EmployeeService(repo=_repo)
+bp = Blueprint("employees", __name__, url_prefix="/employees")
 
+def _service():
+    return current_app.config["EMPLOYEE_SERVICE"]
 
 @bp.post("")
 def create_employee():
     payload = request.get_json(silent=True) or {}
-
-    #minimal validation
-    if "type" not in payload:
-        return {"error": "Missing required field: type"}, 400
-    
-    try:
-        employee = _service.create_employee(payload)
-        return employee, 201
-    except ValueError as e:
-        return {"error": str(e)}, 400
-    
+    employee = _service().create_employee(payload)
+    return employee, 201
 
 @bp.get("/<employee_id>")
 def get_employee(employee_id: str):
-    employee = _service.get_employee(employee_id)
+    employee = _service().get_employee(employee_id)
     if employee is None:
         return {"error": "Employee not found"}, 404
     return employee, 200
 
 @bp.get("/<employee_id>/productivity")
 def get_productivity(employee_id: str):
-    result = _service.get_productivity(employee_id)
+    result = _service().get_productivity(employee_id)
     if result is None:
         return {"error": "Employee not found"}, 404
     return result, 200
