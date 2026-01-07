@@ -36,6 +36,6 @@ def create_app() -> Flask:
     #basic health check
     @app.get("/health")
     def health():
-        return {"status": "ok"}, 200
+        return {"status": "ok", "repo": repo_type}, 200
     
     return app

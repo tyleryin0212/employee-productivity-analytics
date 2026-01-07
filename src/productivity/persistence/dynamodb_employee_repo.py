@@ -9,7 +9,7 @@ from productivity.domain.employee_base import AbstractEmployee
 from productivity.factories.employee_factory import EmployeeFactory
 
 class DynamoDBEmployeeRepository:
-    def __init__(self, tabble_name: str | None = None, region_name: str | None = None):
+    def __init__(self, table_name: str | None = None, region_name: str | None = None):
 
         self._table_name = table_name or os.environ["EMPLOYEES_TABLE_NAME"]
         dynamodb = boto3.resource("dynamodb", region_name=region_name)
