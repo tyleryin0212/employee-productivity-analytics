@@ -1,6 +1,7 @@
 from flask import Blueprint, request, current_app
+from pydantic import ValidationError
 
-bp = Blueprint("employees", __name__, url_prefix="/employees")
+from productivity.schemas.employee_create import CreateEmployeeRequest
 
 bp = Blueprint("employees", __name__, url_prefix="/employees")
 
@@ -9,7 +10,24 @@ def _service():
 
 @bp.post("")
 def create_employee():
-    payload = request.get_json(silent=True) or {}
+    raw = request.get_json(silent=True)
+    if raw is None:
+        return {"error": "Invalid or missing JSON body"}, 400
+
+    try:
+        # Pydantic v2
+        req = CreateEmployeeRequest.model_validate(raw)
+        payload = req.model_dump()
+    except AttributeError:
+        # Pydantic v1 fallback
+        try:
+            req = CreateEmployeeRequest.parse_obj(raw)
+            payload = req.dict()
+        except ValidationError as e:
+            return {"error": "ValidationError", "details": e.errors()}, 400
+    except ValidationError as e:
+        return {"error": "ValidationError", "details": e.errors()}, 400
+
     employee = _service().create_employee(payload)
     return employee, 201
 

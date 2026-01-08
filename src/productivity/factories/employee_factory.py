@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import fields
 from datetime import date
 from typing import Any, Mapping, Dict, Type
 
@@ -30,9 +31,8 @@ class EmployeeFactory:
         if model_cls is None:
             raise ValueError(f"Unsupported employee type: {emp_type}")
 
-        kwargs = dict(data)
+        kwargs: dict[str, Any] = dict(data)
         kwargs.pop("type", None)  # not a dataclass field
-
         kwargs.setdefault("id", "")
 
         # --- nested dataclasses ---
@@ -50,6 +50,9 @@ class EmployeeFactory:
         for key in ("employment_date", "last_promotion_date"):
             if key in kwargs and isinstance(kwargs[key], str):
                 kwargs[key] = date.fromisoformat(kwargs[key])
+        
+        init_field_names = {f.name for f in fields(model_cls) if f.init}
+        kwargs = {k: v for k, v in kwargs.items() if k in init_field_names}
 
         return model_cls(**kwargs)
 
