@@ -19,7 +19,7 @@ class AbstractPartTimeEmployee(AbstractEmployee, ABC):
         self.extra_earnings = self.bonus + self.overtime_earnings
 
     def _base_productivity_part_time(self) -> float:
-        return (self.actual_work_hours / self.contractual_work_hours) * self.PRODUCTIVITY_FACTOR
+        return (self._f(self.actual_work_hours) / self._f(self.contractual_work_hours)) * self.PRODUCTIVITY_FACTOR
     
     def estimate_productivity(self) -> float:
         return super().estimate_productivity() + self._base_productivity_part_time()

@@ -44,5 +44,9 @@ class AbstractEmployee(ABC):
             return: super().estimate_productivity() + extra_terms
         """
         return self._employee_level_bonus()
+    
+    @staticmethod
+    def _f(x) -> float:
+        return float(x)
 
     

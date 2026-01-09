@@ -5,6 +5,11 @@ from datetime import date
 from enum import Enum
 from typing import Any, Mapping, Optional, Dict
 
+import pandas as pd
+
+from ml.features import employee_to_features
+from ml.model import load_model
+from ml.schema import FEATURE_COLUMNS
 from productivity.factories.employee_factory import EmployeeFactory
 from productivity.domain.employee_base import AbstractEmployee
 from productivity.persistence.employee_repo import EmployeeRepository
@@ -79,4 +84,24 @@ class EmployeeService:
             "employee_id": emp.id,
             "type": emp.__class__.__name__,
             "productivity": emp.estimate_productivity(),
+        }
+    
+    def predict_productivity(self, employee_id: str) -> dict | None:
+        employee = self._repo.get(employee_id)
+        if employee is None:
+            return None
+
+        # extract ML features
+        features = employee_to_features(employee)
+
+        # model expects a 2D structure
+        model = load_model("src/ml/model.pkl")
+        X = pd.DataFrame([features], columns=FEATURE_COLUMNS)
+        prediction = model.predict(X)[0]
+
+        return {
+            "employee_id": employee.id,
+            "type": employee.__class__.__name__.lower(),
+            "predicted_productivity": float(prediction),
+            "actual_productivity": float(employee.estimate_productivity()),
         }

@@ -25,7 +25,7 @@ class AbstractFullTimeEmployee(AbstractEmployee, ABC):
     num_projects: int 
 
     def _base_productivity_full_time(self) -> float:
-        return self.last_year_earnings / self.base_pay
+        return self._f(self.last_year_earnings) / self._f(self.base_pay)
     
     def _project_bonus(self) -> float:
         return self.PROJECT_BONUS if self.num_projects > self.PROJECT_BONUS_THRESHOLD else 0.0
